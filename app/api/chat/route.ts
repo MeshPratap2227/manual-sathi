@@ -77,13 +77,13 @@ export async function POST(request: Request) {
     generated = await answerWithOptionalProvider(message, contextEntry, retrievedContext);
   } catch (error) {
     console.error("Manual Sathi assistant provider failed; using local answer.", error);
-    generated = { answer: result.answer, provider: "local-fallback" as const };
+    generated = { answer: contextEntry.answer, provider: "local-fallback" as const };
   }
 
   return NextResponse.json({
     answer: generated.answer,
-    sources: [{ title: result.title, page: result.page, applianceId: result.applianceId }],
-    steps: result.steps,
+    sources: [{ title: contextEntry.title, page: contextEntry.page, applianceId: contextEntry.applianceId }],
+    steps: contextEntry.steps,
     provider: generated.provider,
     retrievedChunks: retrievedContext.length,
   });
