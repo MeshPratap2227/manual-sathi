@@ -39,7 +39,7 @@ export async function POST(_request: Request, { params }: RouteContext) {
 
     const chunks = result.pages?.length
       ? result.pages.map((page) => ({ manual_id: manual.id, user_id: user.id, content: page.text, page_number: page.page }))
-      : [{ manual_id: manual.id, user_id: user.id, content: result.text!, page_number: null }];
+      : [{ manual_id: manual.id, user_id: user.id, content: result.text!, page_number: 1 }];
     const { error: chunkError } = await supabase.from("manual_chunks").insert(chunks);
     if (chunkError) throw new Error(chunkError.message);
     const { error: updateError } = await supabase.from("manuals").update({ status: "indexed", page_count: result.pages?.length ?? null }).eq("id", manual.id).eq("user_id", user.id);
